@@ -1,8 +1,8 @@
 package org.launchcode.techjobs.persistent.controllers;
 
 import jakarta.validation.Valid;
-import org.launchcode.techjobs.persistent.models.Employer;
-import org.launchcode.techjobs.persistent.models.data.EmployerRepository;
+import org.launchcode.techjobs.persistent.models.Skill;
+import org.launchcode.techjobs.persistent.models.data.SkillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,17 +11,18 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
+
 @Controller
-@RequestMapping("employers")
-public class EmployerController {
+@RequestMapping("skills")
+public class SkillController {
 
 
- //TODO: Add a private field of EmployerRepository type called employerRepository.
- // Give this field an @Autowired annotation.
+    //TODO: Add a private field of EmployerRepository type called employerRepository.
+    // Give this field an @Autowired annotation.
 
 
     @Autowired //EO needed for Spring to automatically use data from EmployerRepository to add to this field
-    private EmployerRepository employerRepository; //EO +want to save a new employer, for this added down there employerRepository.save(newEmployer);
+    private SkillRepository skillRepository; //EO +want to save a new employer, for this added down there employerRepository.save(newEmployer);
 
 
     // TODO: Add an index method that responds to the path /employers with a list of all
@@ -29,18 +30,18 @@ public class EmployerController {
     //  employers/index. To figure out the name of the model attribute you
     //  should use to pass employers into the view, review this template.
 
-    @GetMapping ("/")  // EO: to handle HTTP GET request
+    @GetMapping("/") // EO: to handle HTTP GET request
     public String index(Model model) {
-        Iterable<Employer> employers = employerRepository.findAll();
-        model.addAttribute("employers", employers);
-        return "employers/index";
+        Iterable <Skill> skills = skillRepository.findAll();
+        model.addAttribute("skills", skills);
+        return "skills/index";
 
     }
 
     @GetMapping("add")
-    public String displayAddEmployerForm(Model model) {
-        model.addAttribute(new Employer());
-        return "employers/add";
+    public String displayAddSkillForm(Model model) {
+        model.addAttribute(new Skill());
+        return "skills/add";
     }
 
 
@@ -50,16 +51,16 @@ public class EmployerController {
 
 
     @PostMapping("add")
-    public String processAddEmployerForm(@ModelAttribute @Valid Employer newEmployer, // @ModelAttribute tells to use the use's input to populate newEmployer object
-                                    Errors errors, Model model) {
+    public String processAddSkillForm(@ModelAttribute @Valid Skill newSkill, // @ModelAttribute tells to use the use's input to populate newEmployer object
+                                         Errors errors, Model model) {
 
         if (errors.hasErrors()) {
-            return "employers/add";
+            return "skills/add";
         }
 
         // EO added in addition to employerRepository field. It saves the new employer to the
-            // database using the repository
-        employerRepository.save(newEmployer);
+        // database using the repository
+        skillRepository.save(newSkill);
 
         return "redirect:";
     }
@@ -71,19 +72,20 @@ public class EmployerController {
     //  the right argument to look for the given employer object from the data
     //  layer.
 
-    @GetMapping("view/{employerId}")
-    public String displayViewEmployer(Model model, @PathVariable int employerId) {
+    @GetMapping("view/{skillId}")
+    public String displayViewSkill(Model model, @PathVariable int skillId) {
 
-        Optional <Employer> optEmployer = employerRepository.findById(employerId);
+        Optional<Skill> optSkill = skillRepository.findById(skillId);
         //EO Optional because may or may not contain data
 
-        if (optEmployer.isPresent()) {
-            Employer employer = (Employer) optEmployer.get();
-            model.addAttribute("employer", employer);
-            return "employers/view";
+        if (optSkill.isPresent()) {
+            Skill skill = (Skill) optSkill.get();
+            model.addAttribute("skill", skill);
+            return "skills/view";
         } else {
             return "redirect:../";
         }
 
     }
 }
+
