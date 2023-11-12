@@ -27,12 +27,18 @@ private String location; //EO dec lare a variable
     @JoinColumn (name = "employer_id") //EO foreign key
 private List<Job> jobs = new ArrayList<>();
 
+
     //EO add constructors to create objects (empty for Hibernate)
     public Employer () {
     }
 
     public Employer (String location) {
         this.location = location;
+    }
+
+
+    public void addJob(Job job) {
+        jobs.add(job);
     }
 
 
